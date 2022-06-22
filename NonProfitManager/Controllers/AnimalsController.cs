@@ -10,7 +10,7 @@ using NonProfitManager.Models;
 
 namespace NonProfitManager.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/organization/{OrganizationId}/[controller]")]
     [ApiController]
     public class AnimalsController : ControllerBase
     {
@@ -25,24 +25,41 @@ namespace NonProfitManager.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Animal>>> GetAnimals()
         {
-          if (_context.Animals == null)
-          {
-              return NotFound();
-          }
+            if (_context.Animals == null)
+            {
+                return NotFound();
+            }
             return await _context.Animals.ToListAsync();
+        }
+
+        [HttpGet]
+        [Route("organizationanimals")]
+        public async Task<ActionResult<IEnumerable<Animal>>> GetOrganizationAnimals(int OrganizationId)
+        {
+            if (_context.Animals == null)
+            {
+                return NotFound();
+            }
+            var organization = _context.Organizations.Include(o => o.Animals).FirstOrDefault(o => o.OrganizationId == OrganizationId);
+
+            if (organization is null)
+            {
+                return NotFound();
+            }
+            return organization.Animals;
         }
 
         // GET: api/Animals/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Animal>> GetAnimal(int id)
+        public async Task<ActionResult<Animal>> GetAnimal(int OrganizationId, int id)
         {
-          if (_context.Animals == null)
-          {
-              return NotFound();
-          }
+            if (_context.Animals == null)
+            {
+                return NotFound();
+            }
             var animal = await _context.Animals.FindAsync(id);
 
-            if (animal == null)
+            if (animal == null || animal.OrganizationId != OrganizationId)
             {
                 return NotFound();
             }
@@ -84,28 +101,37 @@ namespace NonProfitManager.Controllers
         // POST: api/Animals
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Animal>> PostAnimal(Animal animal)
+        public async Task<ActionResult<Animal>> PostAnimal(int OrganizationId, Animal animal)
         {
-          if (_context.Animals == null)
-          {
-              return Problem("Entity set 'NonProfitManagerDbContext.Animals'  is null.");
-          }
+            if (_context.Animals == null)
+            {
+                return Problem("Entity set 'NonProfitManagerDbContext.Animals'  is null.");
+            }
+
+            var organization = _context.Organizations.FirstOrDefault(x => x.OrganizationId == OrganizationId);
+            if (organization is null)
+            {
+                return NotFound();
+            }
+
+            animal.OrganizationId = OrganizationId;
             _context.Animals.Add(animal);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAnimal", new { id = animal.AnimalId }, animal);
+            //return CreatedAtAction("GetAnimal", new { id = animal.AnimalId }, animal);
+            return Created($"api/organization/{OrganizationId}/Animals/{animal.AnimalId}", null);
         }
 
         // DELETE: api/Animals/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnimal(int id)
+        public async Task<IActionResult> DeleteAnimal(int OrganizationId, int id)
         {
             if (_context.Animals == null)
             {
                 return NotFound();
             }
             var animal = await _context.Animals.FindAsync(id);
-            if (animal == null)
+            if (animal == null || animal.OrganizationId != OrganizationId)
             {
                 return NotFound();
             }
