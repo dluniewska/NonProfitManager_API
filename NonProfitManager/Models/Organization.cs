@@ -9,7 +9,9 @@ namespace NonProfitManager.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OrganizationId { get; set; }
         public string Name { get; set; }
+        [EmailAddress]
         public string Email { get; set; }
+        public int Phone { get; set; }
         public string NIP { get; set; }
         public string KRS { get; set; }
         public string REGON { get; set; }
