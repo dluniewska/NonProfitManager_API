@@ -14,6 +14,6 @@ namespace NonProfitManager.Models
         public DateOnly DateOfBirth{ get; set; }
         public string Status { get; set; }
         public virtual int? UserId { get; set; }
-        public virtual int? OrganizationId { get; set; }
+        public virtual int OrganizationId { get; set; }
     }
 }

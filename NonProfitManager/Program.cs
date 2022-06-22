@@ -26,8 +26,11 @@ builder.Services.AddSwaggerGen(c => c.UseDateOnlyTimeOnlyStringConverters());
 builder.Services
     .AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
     .AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
+builder.Services.AddScoped<INonNonProfitManagerSeeder, NonProfitManagerSeeder>();
 
 var app = builder.Build();
+
+Seed();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -43,3 +46,12 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+void Seed()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var seeder = scope.ServiceProvider.GetRequiredService<INonNonProfitManagerSeeder>();
+        seeder.Seed();
+    }
+}

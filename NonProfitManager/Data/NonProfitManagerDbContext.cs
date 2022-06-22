@@ -42,5 +42,6 @@ namespace NonProfitManager.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Animal> Animals { get; set; }
         public DbSet<Transport> Transports { get; set; }
+        public DbSet<Photo> Photos { get; set; }
     }
 }
