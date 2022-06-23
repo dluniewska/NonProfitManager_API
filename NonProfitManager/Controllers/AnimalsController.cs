@@ -10,7 +10,7 @@ using NonProfitManager.Models;
 
 namespace NonProfitManager.Controllers
 {
-    [Route("api/organization/{OrganizationId}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AnimalsController : ControllerBase
     {
@@ -32,26 +32,9 @@ namespace NonProfitManager.Controllers
             return await _context.Animals.ToListAsync();
         }
 
-        [HttpGet]
-        [Route("organizationanimals")]
-        public async Task<ActionResult<IEnumerable<Animal>>> GetOrganizationAnimals(int OrganizationId)
-        {
-            if (_context.Animals == null)
-            {
-                return NotFound();
-            }
-            var organization = _context.Organizations.Include(o => o.Animals).FirstOrDefault(o => o.OrganizationId == OrganizationId);
-
-            if (organization is null)
-            {
-                return NotFound();
-            }
-            return organization.Animals;
-        }
-
         // GET: api/Animals/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Animal>> GetAnimal(int OrganizationId, int id)
+        public async Task<ActionResult<Animal>> GetAnimal(int id)
         {
             if (_context.Animals == null)
             {
@@ -59,7 +42,7 @@ namespace NonProfitManager.Controllers
             }
             var animal = await _context.Animals.FindAsync(id);
 
-            if (animal == null || animal.OrganizationId != OrganizationId)
+            if (animal == null)
             {
                 return NotFound();
             }
@@ -101,37 +84,30 @@ namespace NonProfitManager.Controllers
         // POST: api/Animals
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Animal>> PostAnimal(int OrganizationId, Animal animal)
+        public async Task<ActionResult<Animal>> PostAnimal(Animal animal)
         {
             if (_context.Animals == null)
             {
                 return Problem("Entity set 'NonProfitManagerDbContext.Animals'  is null.");
             }
 
-            var organization = _context.Organizations.FirstOrDefault(x => x.OrganizationId == OrganizationId);
-            if (organization is null)
-            {
-                return NotFound();
-            }
-
-            animal.OrganizationId = OrganizationId;
+            animal.OrganizationId = 1;
             _context.Animals.Add(animal);
             await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetAnimal", new { id = animal.AnimalId }, animal);
-            return Created($"api/organization/{OrganizationId}/Animals/{animal.AnimalId}", null);
+            return CreatedAtAction("GetAnimal", new { id = animal.AnimalId }, animal);
         }
 
         // DELETE: api/Animals/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnimal(int OrganizationId, int id)
+        public async Task<IActionResult> DeleteAnimal(int id)
         {
             if (_context.Animals == null)
             {
                 return NotFound();
             }
             var animal = await _context.Animals.FindAsync(id);
-            if (animal == null || animal.OrganizationId != OrganizationId)
+            if (animal == null)
             {
                 return NotFound();
             }

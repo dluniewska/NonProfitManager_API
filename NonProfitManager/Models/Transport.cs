@@ -13,5 +13,8 @@ namespace NonProfitManager.Models
         public DateOnly Date { get; set; }
         public virtual int UserId { get; set; }
         public virtual int OrganizationId { get; set; }
+        public string Description { get; set; }
+        public int AnimalId{ get; set; }
+        public int AnimalsQuantity { get; set; }
     }
 }

@@ -26,6 +26,11 @@ namespace NonProfitManager.Data
                 entity.Property(a => a.AnimalId).ValueGeneratedOnAdd();
 
             });
+            modelBuilder.Entity<AdoptedAnimal>(entity =>
+            {
+                entity.Property(a => a.AdoptedAnimalId).ValueGeneratedOnAdd();
+
+            });
             modelBuilder.Entity<Transport>(entity =>
             {
                 entity.Property(t => t.TransportId).ValueGeneratedOnAdd();
@@ -46,6 +51,7 @@ namespace NonProfitManager.Data
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Animal> Animals { get; set; }
+        public DbSet<AdoptedAnimal> AdoptedAnimals { get; set; }
         public DbSet<Transport> Transports { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Role> Roles { get; set; }
