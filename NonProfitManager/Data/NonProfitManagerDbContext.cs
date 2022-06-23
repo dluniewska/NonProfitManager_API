@@ -36,6 +36,11 @@ namespace NonProfitManager.Data
                 entity.Property(p => p.PhotoId).ValueGeneratedOnAdd();
 
             });
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(r => r.RoleId).ValueGeneratedOnAdd();
+
+            });
         }
 
         public DbSet<Organization> Organizations { get; set; }
@@ -43,5 +48,6 @@ namespace NonProfitManager.Data
         public DbSet<Animal> Animals { get; set; }
         public DbSet<Transport> Transports { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<Role> Roles { get; set; }
     }
 }

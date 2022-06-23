@@ -38,6 +38,22 @@ namespace NonProfitManager.Data
 
                     _dbContext.SaveChanges();
                 }
+
+                if (!_dbContext.Roles.Any())
+                {
+                    _dbContext.Roles.AddRange(
+                        new Role()
+                        {
+                            Name = "Admin",
+                        },
+                        new Role()
+                        {
+                            Name = "User"
+                        }
+                    );
+
+                    _dbContext.SaveChanges();
+                }
             }
         }
     }
