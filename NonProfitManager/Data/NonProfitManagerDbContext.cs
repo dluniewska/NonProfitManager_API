@@ -46,6 +46,21 @@ namespace NonProfitManager.Data
                 entity.Property(r => r.RoleId).ValueGeneratedOnAdd();
 
             });
+            modelBuilder.Entity<Survey>(entity =>
+            {
+                entity.Property(s => s.SurveyId).ValueGeneratedOnAdd();
+
+            });
+            modelBuilder.Entity<Question>(entity =>
+            {
+                entity.Property(q => q.QuestionId).ValueGeneratedOnAdd();
+
+            });
+            modelBuilder.Entity<UserAnswer>(entity =>
+            {
+                entity.Property(ua => ua.UserAnswerId).ValueGeneratedOnAdd();
+
+            });
         }
 
         public DbSet<Organization> Organizations { get; set; }
@@ -55,5 +70,8 @@ namespace NonProfitManager.Data
         public DbSet<Transport> Transports { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Question> Questions { get; set; } 
+        public DbSet<UserAnswer> UserAnswers { get; set; }
+        public DbSet<Survey> Surveys { get; set; }
     }
 }

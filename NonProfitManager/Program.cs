@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NonProfitManager.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var CorsPolicy = "_CorsPolicy";
 
 // Add services to the container.
 
@@ -12,7 +12,7 @@ builder.Services.AddDbContext<NonProfitManagerDbContext>(
 );
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddPolicy(name: CorsPolicy,
         policy =>
         {
             policy.AllowAnyHeader();
@@ -40,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(CorsPolicy);
 
 app.UseAuthorization();
 

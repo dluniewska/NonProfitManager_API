@@ -44,11 +44,15 @@ namespace NonProfitManager.Data
                     _dbContext.Roles.AddRange(
                         new Role()
                         {
-                            Name = "Admin",
+                            Name = "admin",
                         },
                         new Role()
                         {
-                            Name = "User"
+                            Name = "user"
+                        },
+                        new Role()
+                        {
+                            Name = "organization"
                         }
                     );
 
